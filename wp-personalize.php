@@ -3,7 +3,7 @@
 * Plugin Name: WP Personalize
 * Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5GB537F64NUDE
 * Plugin URI: http://wordpress.org/plugins/wp-personalize/
-* Version: 1.0
+* Version: 2.0
 * Author: Ecalon IT LTD.
 * Author URI: http://www.ecalon.it/
 * Description: Personalize and customize your WordPress site with your own CSS, Javascript, HTML and PHP code fragments.
@@ -29,9 +29,66 @@
 /**
 * @package WP Personalize
 * @author Ecalon IT LTD.
-* @version 1.0
+* @version 2.0
 * @copyright Ecalon IT LTD.
 */
+//Constants
+define('WWP_PLUGIN_NAME', 'wp-personalize');
+define('WWP_PLUGIN_LANG_DOMAIN', 'wp-personalize');
+define('WWP_PLUGIN_DISPLAY_NAME', __('WP Personalize', WWP_PLUGIN_LANG_DOMAIN));
+define('WWP_PLUGIN_TITLE_NAME', __('WP Personalize Editor', WWP_PLUGIN_LANG_DOMAIN));
+define('WWP_PLUGIN_VERSION', '2.0.0');
+
+//Hooks
+register_activation_hook(__FILE__, 'wppActivation');
+register_deactivation_hook(__FILE__, 'wppDeactivation');
+
+//Ajax Hooks
+
+//Admin Styles
+wp_register_style(WWP_PLUGIN_NAME.'-admin', plugin_dir_url(__FILE__) . 'css/admin.css');
+wp_enqueue_style(WWP_PLUGIN_NAME.'-admin');
+wp_register_style(WWP_PLUGIN_NAME.'-whhg', plugin_dir_url(__FILE__) . 'css/whhg.css');
+wp_enqueue_style(WWP_PLUGIN_NAME.'-whhg');
+
+//Admin JS
+wp_register_script(WWP_PLUGIN_NAME.'-admin', plugin_dir_url(__FILE__) . 'js/admin.js', array('jquery'));
+wp_enqueue_script(WWP_PLUGIN_NAME.'-admin');
+wp_register_script(WWP_PLUGIN_NAME.'-blockUI', plugin_dir_url(__FILE__) . 'js/jquery.blockUI.js', array('jquery'));
+wp_enqueue_script(WWP_PLUGIN_NAME.'-blockUI');
+
+//Menu Pages
+add_action('admin_menu', 'wppAddOptionsPage');
+
+//Load Languages Files
+add_action('plugins_loaded', 'loadLangFiles');
+function loadLangFiles() {
+	load_plugin_textdomain(WWP_PLUGIN_LANG_DOMAIN, false, basename(dirname(__FILE__)).'/lang');
+}
+
+function wppActivation() {
+	update_option(WWP_PLUGIN_NAME, WWP_PLUGIN_VERSION);
+	if (is_multisite()) {
+		update_site_option(WWP_PLUGIN_NAME, WWP_PLUGIN_VERSION);
+	}
+}
+
+function wppDeactivation() {
+	
+}
+
+function wppAddOptionsPage() {
+  add_options_page(WWP_PLUGIN_TITLE_NAME, WWP_PLUGIN_DISPLAY_NAME, 'manage_options', WWP_PLUGIN_NAME, 'wppOptionsPage');
+}
+
+function wppOptionsPage() {
+	if (!current_user_can('manage_options')) {
+      wp_die(_e('You do not have sufficient permissions to access this page.'));
+  }
+	include_once(WP_PLUGIN_DIR.'/'.WWP_PLUGIN_NAME.'/inc/optionsPage.php');
+}
+
+/*
 class WPPersonalize {
 
 	function WPPersonalize() {
@@ -201,4 +258,5 @@ class WPPersonalize {
 }
 
 $wpPersonalize = new WPPersonalize();
+*/
 ?>
