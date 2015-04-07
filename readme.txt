@@ -11,6 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Description ==
 
 Personalize and customize your WordPress single site or multisite (the entire network or individual sites), with your own CSS, Javascript, HTML and PHP scripts without changing any WordPress core files, plugin files or template files.
+= Features =
 * **Languages:** HTML, CSS, Javscript and PHP.
 * **Locations:** '<head>', '<body> or the footer section.
 * **Areas:** Site, admin or both.
@@ -19,7 +20,7 @@ Personalize and customize your WordPress single site or multisite (the entire ne
 = NOTE =
 This plugin is for people with some level of knowledge for HTML, CSS, Javascript or PHP.
 
-The possibilities are endless for personalizing and customizing your WordPress site or multisite:
+= The possibilities are endless for personalizing and customizing your WordPress site or multisite: =
 * **Hide Elements:** With custom CSS or Javascript (jQuery) you are able to hide HTML elements.
 * **Style Elements:** With custom CSS you are able to override any styling.
 * **Add Elements:** Add HTML elements to the '<head>', '<body> or the footer section.
@@ -42,8 +43,8 @@ Also please send us screenshots of any errors you are receiving.
 
 == Screenshots ==
 
-1. Single site admin settings page.
-2. MultiSite network admin settings page.
+1. Single site admin settings page
+2. MultiSite network admin settings page
 
 == Changelog ==
 

@@ -6,7 +6,7 @@
 * Version: 2.0.0
 * Author: Ecalon IT LTD.
 * Author URI: http://www.ecalon.it/
-* Description: Personalize and customize your WordPress single site or multisite (for the entire network or individual sites), with your own CSS, Javascript, HTML and PHP scripts without changing any WordPress core files, plugin files or template files.
+* Description: Personalize and customize your WordPress single site or multisite (for the entire network or individual sites).
 * License: GPL2
 */
 
