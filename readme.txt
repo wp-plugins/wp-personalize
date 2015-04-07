@@ -41,11 +41,6 @@ This plugin is for people with some level of knowledge for HTML, CSS, Javascript
 Please specify and provide as much information as you can to help us debug the problem. 
 Also please send us screenshots of any errors you are receiving.
 
-== Screenshots ==
-
-1. Single site admin settings page
-2. MultiSite network admin settings page
-
 == Changelog ==
 
 = 2.0.0 =
@@ -56,6 +51,11 @@ Also please send us screenshots of any errors you are receiving.
 
 = 1.0 =
 * First release.
+
+== Screenshots ==
+
+1. Single site admin settings page
+1. MultiSite network admin settings page
 
 == Upgrade Notice ==
 
