@@ -1,41 +1,37 @@
 === WP Personalize ===
 Contributors: Ecalon IT LTD.
 Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5GB537F64NUDE
-Tags: personalize,custom,js,javascript,css,php
+Tags: personalize,custom,js,javascript,css,php,multisite
 Requires at least: 3.0
 Tested up to: 4.1.1
-Stable tag: 2.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Personalize and customize your WordPress site theme and/or your plugins with your own CSS, JS (Javascript), HTML and PHP code fragments by editing the following "WP Personalize" plugin files in your favourite code editor / IDE:
+Personalize and customize your WordPress single site or multisite (the entire network or individual sites), with your own CSS, Javascript, HTML and PHP scripts without changing any WordPress core files, plugin files or template files.
+* **Languages:** HTML, CSS, Javscript and PHP.
+* **Locations:** '<head>', '<body> or the footer section.
+* **Areas:** Site, admin or both.
+* **Control:** For multisite installations, you are able to control which languages, locations and areas can be selected on single site level.
 
-= cssCode.css =
-* **Location:** '*../wp-content/wp-personalize/cssCode.css*'
-* **Usage:** This file is included in the header section (between '<code><head>...</head></code>'), and can include any custom CSS code.
+= NOTE =
+This plugin is for people with some level of knowledge for HTML, CSS, Javascript or PHP.
 
-= jsCode.css =
-* **Location:** '*../wp-content/wp-personalize/jsCode.css*'
-* **Usage:** This file is included in the header section (between '<code><head>...</head></code>'), and can include any custom JS / Javascript code.
-
-= headCode.php =
-* **Location:** '*../wp-content/wp-personalize/headCode.php*'
-* **Usage:** This file is included in the beginning of the body section (after '<code><body>...</code>'), and can include any custom CSS, JS (Javascript), HTML and PHP.
-
-= bodyCode.php =
-* **Location:** '*../wp-content/wp-personalize/bodyCode.php*'
-* **Usage:** This file is included in the middle of the body section (between '<code><body>...</body></code>'), and can include any custom CSS, JS (Javascript), HTML and PHP.
-
-= footCode.php =
-* **Location:** '*../wp-content/wp-personalize/footCode.php*'
-* **Usage:** This file is included in the end of the body section (before '<code>...</body></code>'), and can include any custom CSS, JS (Javascript), HTML and PHP.
+The possibilities are endless for personalizing and customizing your WordPress site or multisite:
+* **Hide Elements:** With custom CSS or Javascript (jQuery) you are able to hide HTML elements.
+* **Style Elements:** With custom CSS you are able to override any styling.
+* **Add Elements:** Add HTML elements to the '<head>', '<body> or the footer section.
+* **Control Elements:** With custom Javascript (jQuery) you are able to control any HTML element or add further actions on a specific event.
+* **PHP Code:** Implement your own PHP code in the '<head>', '<body> or the footer section.
+* **Much More:** Use your imagination.
 
 == Installation ==
 
-1. Upload `wp-personalize` directory to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+1. Upload `wp-personalize` directory to the `/wp-content/plugins/` directory.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. The "WP Personalize" menu page is located under "Settings" for both single sites and multisite.
 
 == Frequently Asked Questions ==
 
@@ -46,14 +42,21 @@ Also please send us screenshots of any errors you are receiving.
 
 == Screenshots ==
 
-1. Custom Menu in Admin Panel
+1. Single site admin settings page.
+2. MultiSite network admin settings page.
 
 == Changelog ==
+
+= 2.0.0 =
+* Added MultiSite support.
+* Added online script editor for HTML, CSS, Javascript and PHP.
+* Added Network wide script possibility.
+* Added Single site script possibility.
 
 = 1.0 =
 * First release.
 
 == Upgrade Notice ==
 
-= 0.1 =
-* First release.
+= 2.0.0 =
+If you are upgrading from version 1.0 to 2.0.0, you will need to move the code or scripts from the files located in '*../wp-content/wp-personalize/...*' to the built-in script editor.
