@@ -3,7 +3,7 @@
 * Plugin Name: WP Personalize
 * Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5GB537F64NUDE
 * Plugin URI: http://wordpress.org/plugins/wp-personalize/
-* Version: 2.0.0
+* Version: 2.0.1
 * Author: Ecalon IT LTD.
 * Author URI: http://www.ecalon.it/
 * Description: Personalize and customize your WordPress single site or multisite (for the entire network or individual sites).
@@ -29,7 +29,7 @@
 /**
 * @package WP Personalize
 * @author Ecalon IT LTD.
-* @version 2.0.0
+* @version 2.0.1
 * @copyright Ecalon IT LTD.
 */
 

@@ -4,7 +4,7 @@ Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: personalize,custom,js,javascript,css,php,multisite
 Requires at least: 3.0
 Tested up to: 4.1.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Personalize and customize your WordPress single site or multisite (the entire network or individual sites), with your own CSS, Javascript, HTML and PHP scripts without changing any WordPress core files, plugin files or template files.
 = Features =
 * **Languages:** HTML, CSS, Javscript and PHP.
-* **Locations:** '<head>', '<body> or the footer section.
+* **Locations:** '&#60;head&#62;', '&#60;body&#62;' or the footer section.
 * **Areas:** Site, admin or both.
 * **Control:** For multisite installations, you are able to control which languages, locations and areas can be selected on single site level.
 
@@ -25,7 +25,7 @@ This plugin is for people with some level of knowledge for HTML, CSS, Javascript
 * **Style Elements:** With custom CSS you are able to override any styling.
 * **Add Elements:** Add HTML elements to the '<head>', '<body> or the footer section.
 * **Control Elements:** With custom Javascript (jQuery) you are able to control any HTML element or add further actions on a specific event.
-* **PHP Code:** Implement your own PHP code in the '<head>', '<body> or the footer section.
+* **PHP Code:** Implement your own PHP code in the '&#60;head&#62;', '&#60;body&#62;' or the footer section.
 * **Much More:** Use your imagination.
 
 == Installation ==
@@ -42,6 +42,9 @@ Please specify and provide as much information as you can to help us debug the p
 Also please send us screenshots of any errors you are receiving.
 
 == Changelog ==
+
+= 2.0.1 =
+* Updated readme.txt file.
 
 = 2.0.0 =
 * Added MultiSite support.
