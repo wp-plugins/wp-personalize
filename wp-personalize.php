@@ -3,14 +3,14 @@
 * Plugin Name: WP Personalize
 * Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5GB537F64NUDE
 * Plugin URI: http://wordpress.org/plugins/wp-personalize/
-* Version: 1.0
+* Version: 2.0.0
 * Author: Ecalon IT LTD.
 * Author URI: http://www.ecalon.it/
-* Description: Personalize and customize your WordPress site with your own CSS, Javascript, HTML and PHP code fragments.
+* Description: Personalize and customize your WordPress single site or multisite (for the entire network or individual sites), with your own CSS, Javascript, HTML and PHP scripts without changing any WordPress core files, plugin files or template files.
 * License: GPL2
 */
 
-/*  Copyright 2013 WP Personalize (email : info@ecalon.it)
+/*  Copyright 2015 WP Personalize (email : info@ecalon.it)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -29,176 +29,345 @@
 /**
 * @package WP Personalize
 * @author Ecalon IT LTD.
-* @version 1.0
+* @version 2.0.0
 * @copyright Ecalon IT LTD.
 */
-class WPPersonalize {
 
-	function WPPersonalize() {
-		$this->plugin = new stdClass;
-		$this->plugin->name 				= 'wp-personalize';
-		$this->plugin->displayName 	= 'WP Personalize';
-		$this->plugin->version 			= '1.0.0';
-		$this->plugin->folder 			= WP_PLUGIN_DIR.'/'.$this->plugin->name;
-		$this->plugin->pluginURL 		= WP_PLUGIN_URL.'/'.str_replace(basename(__FILE__),"",plugin_basename(__FILE__));
-		$this->plugin->contentURL		= WP_CONTENT_URL.'/wp-personalize/';
-		
-		$this->plugin->cssCode 	= WP_CONTENT_DIR.'/'.$this->plugin->name.'/cssCode.css';
-		$this->plugin->jsCode 	= WP_CONTENT_DIR.'/'.$this->plugin->name.'/jsCode.js';
-		$this->plugin->headCode = WP_CONTENT_DIR.'/'.$this->plugin->name.'/headCode.php';
-		$this->plugin->bodyCode = WP_CONTENT_DIR.'/'.$this->plugin->name.'/bodyCode.php';
-		$this->plugin->footCode = WP_CONTENT_DIR.'/'.$this->plugin->name.'/footCode.php';
-		
-		$this->plugin->failed 		= false;
-		
-		//Hooks
-		register_activation_hook(__FILE__, array($this, 'activation'));
-		register_deactivation_hook(__FILE__, array($this, 'deactivation'));
-		
-		add_action('admin_enqueue_scripts', array($this, 'adminCSS'));
-		add_action('admin_menu', array($this, 'adminMenu'));
-		add_action('wp_enqueue_scripts', array($this, 'cssCode'), 9999999999);
-		add_action('wp_enqueue_scripts', array($this, 'jsCode'), 9999999999);
-		add_action('wp_head', array($this, 'headCode'), 9999999999);
-		add_action('the_content', array($this, 'bodyCode'));
-		add_action('wp_footer', array($this, 'footCode'), 9999999999);
-	}
-	
-	function activation() {
-		update_option($this->plugin->name, $this->plugin->version);
-		
-		if (!is_dir(WP_CONTENT_DIR.'/'.$this->plugin->name.'/')) {
-			//Create plugin dir
-			if (mkdir(WP_CONTENT_DIR.'/'.$this->plugin->name, 0775)) {
-				$this->copyFiles();
-			} else {
-				$this->plugin->failed = true;
-				$this->showMessage(__('WP Personalize: Creation of the folder "'). 
-													 		 WP_CONTENT_DIR.'/'.$this->plugin->name.'/'.
-													 __('" failed, please create it.'), true);
-			}
-		} else {
-			$this->copyFiles();
-		}
-	}
+//Constants
+define('WWP_PLUGIN_NAME', 'wp-personalize');
+define('WWP_PLUGIN_LANG_DOMAIN', 'wp-personalize');
+define('WWP_PLUGIN_DISPLAY_NAME', __('WP Personalize', WWP_PLUGIN_LANG_DOMAIN));
+define('WWP_PLUGIN_TITLE_NAME', __('WP Personalize Editor', WWP_PLUGIN_LANG_DOMAIN));
+define('WWP_PLUGIN_VERSION', '2.0.0');
 
-	function deactivation() {
-		
-	}
-	
-	function copyFiles() {
-		if (!file_exists($this->plugin->cssCode)) {
-			if (!copy(WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/cssCode.css', $this->plugin->cssCode)) {
-				$this->plugin->failed = true;
-				$this->showMessage(__('WP Personalize: Copying the file "'). 
-													 		 WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/cssCode.css'.
-													 __('" failed, please copy it to folder "'). 
-													 			WP_CONTENT_DIR.'/'.$this->plugin->name.'/"', true);
-			}
-		}
-		if (!file_exists($this->plugin->jsCode)) {
-			if (!copy(WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/jsCode.js', $this->plugin->jsCode)) {
-				$this->plugin->failed = true;
-				$this->showMessage(__('WP Personalize: Copying the file "'). 
-													 		 WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/jsCode.js'.
-													 __('" failed, please copy it to folder "'). 
-													 			WP_CONTENT_DIR.'/'.$this->plugin->name.'/"', true);
-			}
-		}
-		if (!file_exists($this->plugin->headCode)) {
-			if (!copy(WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/headCode.php', $this->plugin->headCode)) {
-				$this->plugin->failed = true;
-				$this->showMessage(__('WP Personalize: Copying the file "'). 
-													 		 WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/headCode.php'.
-													 __('" failed, please copy it to folder "'). 
-													 			WP_CONTENT_DIR.'/'.$this->plugin->name.'/"', true);
-			}
-		}
-		if (!file_exists($this->plugin->bodyCode)) {
-			if (!copy(WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/bodyCode.php', $this->plugin->bodyCode)) {
-				$this->plugin->failed = true;
-				$this->showMessage(__('WP Personalize: Copying the file "'). 
-													 		 WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/bodyCode.php'.
-													 __('" failed, please copy it to folder "'). 
-													 			WP_CONTENT_DIR.'/'.$this->plugin->name.'/"', true);
-			}
-		}
-		if (!file_exists($this->plugin->footCode)) {
-			if (!copy(WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/footCode.php', $this->plugin->footCode)) {
-				$this->plugin->failed = true;
-				$this->showMessage(__('WP Personalize: Copying the file "'). 
-													 		 WP_PLUGIN_DIR.'/'.$this->plugin->name.'/files/footCode.php'.
-													 __('" failed, please copy it to folder "'). 
-													 			WP_CONTENT_DIR.'/'.$this->plugin->name.'/"', true);
-			}
-		}
-	}
-	
-	function showMessage($message, $errormsg = false) {
-		if ($errormsg) {
-			echo '<div id="message" class="error">';
-		} else {
-			echo '<div id="message" class="updated fade">';
-		}
-		echo "<p><strong>$message</strong></p></div>";
-	} 
-	
-	function adminCSS() {
-		wp_register_style($this->plugin->name.'-admin', WP_PLUGIN_URL.'/'.$this->plugin->name.'/css/admin.css');
-		wp_enqueue_style($this->plugin->name.'-admin');
-	}
-    
-	function adminMenu() {
-		add_menu_page($this->plugin->displayName, 
-									$this->plugin->displayName, 
-									'manage_options', 
-									$this->plugin->name, 
-									array(&$this, 'adminPanel'), 
-									WP_PLUGIN_URL.'/'.$this->plugin->name.'/images/icons/source_code-16.png');
-	}
+//Variables
+$scriptSiteArr	= get_option('wp_personalize_script_arr', array());
+$scriptNetArr 	= get_site_option('wp_personalize_script_net_arr', array());
+$scriptSetArr 	= get_site_option('wp_personalize_script_set_arr', array());
+$locationArr 	= array('head' 			=> __('Head', PLUGIN_LANG_DOMAIN),
+										  'bodyTop' 	=> __('Body Top', PLUGIN_LANG_DOMAIN),
+											'bodyFoot'	=> __('Body Footer', PLUGIN_LANG_DOMAIN));
+$typeArr 			= array('html'			=> __('HTML', PLUGIN_LANG_DOMAIN),
+											'css'				=> __('CSS', PLUGIN_LANG_DOMAIN),
+											'js'				=> __('Javascript', PLUGIN_LANG_DOMAIN),
+											'php'				=> __('PHP', PLUGIN_LANG_DOMAIN));
+$areaArr 			= array('site'			=> __('Site Only', PLUGIN_LANG_DOMAIN),
+											'admin'			=> __('Admin Only', PLUGIN_LANG_DOMAIN),
+											'both'			=> __('Both', PLUGIN_LANG_DOMAIN));
+//Hooks
+register_activation_hook(__FILE__, 'wppActivation');
+register_deactivation_hook(__FILE__, 'wppDeactivation');
+add_action('plugins_loaded', 'checkIsSuperAdmin'); 
 
-	function adminPanel() {
-		if (!current_user_can('manage_options')) {
-        wp_die(_e('You do not have sufficient permissions to access this page.'));
-    }
-		include_once(WP_PLUGIN_DIR.'/'.$this->plugin->name.'/information.php');  
+//Admin Styles
+wp_register_style(WWP_PLUGIN_NAME.'-admin', plugin_dir_url(__FILE__) . 'css/admin.css');
+wp_enqueue_style(WWP_PLUGIN_NAME.'-admin');
+wp_register_style(WWP_PLUGIN_NAME.'-whhg', plugin_dir_url(__FILE__) . 'css/whhg.css');
+wp_enqueue_style(WWP_PLUGIN_NAME.'-whhg');
+wp_register_style(WWP_PLUGIN_NAME.'-jquery-ui', plugin_dir_url(__FILE__) . 'css/jquery-ui.css');
+wp_enqueue_style(WWP_PLUGIN_NAME.'-jquery-ui');
+
+//Admin JS
+wp_register_script(WWP_PLUGIN_NAME.'-admin', plugin_dir_url(__FILE__) . 'js/admin.js', array('jquery-ui-dialog', 'jquery'));
+wp_enqueue_script(WWP_PLUGIN_NAME.'-admin');
+wp_register_script(WWP_PLUGIN_NAME.'-blockUI', plugin_dir_url(__FILE__) . 'js/jquery.blockUI.js', array('jquery-ui-dialog', 'jquery'));
+wp_enqueue_script(WWP_PLUGIN_NAME.'-blockUI');
+
+//Load Scripts
+$wpHeadScript						= "";
+$wpAdminHeadScript			= "";
+$wpBodyTopScript				= "";
+$wpBodyMidScript				= "";
+$wpBodyFootScript				= "";
+$wpAdminBodyFootScript	= "";
+$isAdmin					= is_admin();
+$isNetworkAdmin 	= is_network_admin();
+$isSuperAdmin			= false;
+
+//Is network admin AJAX request hack
+if (defined('DOING_AJAX') && DOING_AJAX && is_multisite() && preg_match('#^'.network_admin_url().'#i',$_SERVER['HTTP_REFERER'])) {
+	$isNetworkAdmin = true;
+}
+
+handleScripts($scriptSiteArr);
+if (!$isNetworkAdmin) {
+	handleScripts($scriptNetArr);
+}
+
+add_filter('wp_head', 'hookHeadScript', 999, 0);
+add_filter('admin_head', 'hookAdminHeadScript', 999, 0);
+add_filter('wp_footer', 'hookBodyFootScript', 999, 0);
+add_filter('admin_footer', 'hookAdminBodyFootScript', 999, 0);
+
+//Ajax Hooks
+add_action('wp_ajax_wpp_load_list', 'wppLoadList');
+add_action('wp_ajax_wpp_update_script', 'wppUpdateScript');
+add_action('wp_ajax_wpp_update_settings', 'wppUpdateSettings');
+add_action('wp_ajax_wpp_load_script', 'wppLoadScript');
+add_action('wp_ajax_wpp_delete_script', 'wppDeleteScript');
+
+//Menu Pages
+add_action('admin_menu', 'wppAddOptionsPage');
+if (is_multisite()) {
+	add_action('network_admin_menu', 'wppAddNetworkOptionsPage');
+}
+
+//Load Languages Files
+add_action('plugins_loaded', 'loadLangFiles');
+function loadLangFiles() {
+	load_plugin_textdomain(WWP_PLUGIN_LANG_DOMAIN, false, basename(dirname(__FILE__)).'/lang');
+}
+
+function wppActivation() {
+	update_option(WWP_PLUGIN_NAME, WWP_PLUGIN_VERSION);
+	if (is_multisite()) {
+		update_site_option(WWP_PLUGIN_NAME, WWP_PLUGIN_VERSION);
 	}
-    
-	function cssCode() {
-		if (file_exists($this->plugin->cssCode)) {
-			wp_register_style($this->plugin->name, WP_CONTENT_URL.'/'.$this->plugin->name.'/cssCode.css');
-			wp_enqueue_style($this->plugin->name);
-		}
-	}
+}
+
+function wppDeactivation() {
+	
+}
+
+function wppAddOptionsPage() {
+  add_options_page(WWP_PLUGIN_TITLE_NAME, WWP_PLUGIN_DISPLAY_NAME, 'manage_options', WWP_PLUGIN_NAME, 'wppOptionsPage');
+}
+
+function wppAddNetworkOptionsPage() {
+	add_submenu_page('settings.php', WWP_PLUGIN_TITLE_NAME, WWP_PLUGIN_DISPLAY_NAME, 'manage_options', WWP_PLUGIN_NAME, 'wppNetworkOptionsPage' ); 
+}
+
+function wppOptionsPage() {
+	if (!current_user_can('manage_options')) {
+      wp_die(_e('You do not have sufficient permissions to access this page.'));
+  }
   
-  function jsCode() {
-		if (file_exists($this->plugin->jsCode)) {
-			wp_register_script($this->plugin->name, WP_CONTENT_URL.'/'.$this->plugin->name.'/jsCode.js');
-			wp_enqueue_script($this->plugin->name);
-		}
+  GLOBAL $isNetworkAdmin, $isSuperAdmin, $scriptSiteArr, $scriptSetArr, $locationArr, $typeArr, $areaArr;
+	include_once(WP_PLUGIN_DIR.'/'.WWP_PLUGIN_NAME.'/inc/optionsPage.php');
+}
+
+function wppNetworkOptionsPage() {
+	if (!current_user_can('manage_network_options')) {
+      wp_die(_e('You do not have sufficient permissions to access this page.'));
+  }
+  
+	GLOBAL $isNetworkAdmin, $isSuperAdmin, $scriptNetArr, $scriptSetArr, $locationArr, $typeArr, $areaArr;
+	include_once(WP_PLUGIN_DIR.'/'.WWP_PLUGIN_NAME.'/inc/networkOptionsPage.php');
+}
+
+function checkIsSuperAdmin() {
+	GLOBAL $isSuperAdmin;
+	
+	$isSuperAdmin = is_super_admin(wp_get_current_user());
+}
+
+function wppLoadList() {
+	GLOBAL $isSuperAdmin, $scriptSiteArr, $scriptNetArr, $isNetworkAdmin;
+	
+	if ($isSuperAdmin AND $isNetworkAdmin) {
+		$scriptNetArr 	= get_site_option('wp_personalize_script_net_arr', array());
+		echo json_encode($scriptNetArr);
+	} else {
+		$scriptSiteArr	= get_option('wp_personalize_script_arr', array());
+		echo json_encode($scriptSiteArr);
 	}
 	
-	function headCode() {
-		if (file_exists($this->plugin->headCode)) {
-			include_once($this->plugin->headCode);
-		}
+	die();
+}
+
+function wppUpdateScript() {
+	GLOBAL $scriptSiteArr, $scriptNetArr, $isAdmin, $isNetworkAdmin, $isSuperAdmin, $isNetworkAdmin;
+	
+	if ($isSuperAdmin AND $isNetworkAdmin) {
+		$scriptNetArr[trim($_POST['title'])] = array('title'			=> $_POST['title'],
+																								 'location' 	=> $_POST['location'],
+														 										 'type' 			=> $_POST['type'],
+														 										 'area' 			=> $_POST['area'],
+														 										 'code' 			=> $_POST['codeEditor']);
+		
+		$result = update_site_option('wp_personalize_script_net_arr', $scriptNetArr);
+	} else {
+		$scriptSiteArr[trim($_POST['title'])] = array('title'			=> $_POST['title'],
+																									'location' 	=> $_POST['location'],
+														 											'type' 			=> $_POST['type'],
+														 											'area' 			=> $_POST['area'],
+														 											'code' 			=> $_POST['codeEditor']);
+		
+		$result = update_option('wp_personalize_script_arr', $scriptSiteArr);
 	}
 	
-	function bodyCode($content) {
-		if (file_exists($this->plugin->bodyCode)) {
-			ob_start();
-			include_once($this->plugin->bodyCode);
-			$content .= ob_get_clean();
-		}
-		return $content;
+	if ($result) {
+		echo json_encode(array('result' => 'true'));
+	} else {
+		echo json_encode(array('result' => 'false'));
 	}
 	
-	function footCode() {
-		if (file_exists($this->plugin->footCode)) {
-			include_once($this->plugin->footCode);
+	die();
+}
+
+function wppUpdateSettings() {
+	GLOBAL $scriptSetArr, $isAdmin, $isNetworkAdmin, $isSuperAdmin, $isNetworkAdmin;
+	
+	if ($isSuperAdmin AND $isNetworkAdmin) {
+		$scriptSetArr['location'] = $_POST['location'];
+		$scriptSetArr['type'] 		= $_POST['type'];
+		$scriptSetArr['area'] 		= $_POST['area'];
+		
+		$result = update_site_option('wp_personalize_script_set_arr', $scriptSetArr);
+	} else {
+		$result = false;	
+	}
+	
+	if ($result) {
+		echo json_encode(array('result' => 'true'));
+	} else {
+		echo json_encode(array('result' => 'false'));
+	}
+	
+	die();
+}
+
+function wppLoadScript() {
+	GLOBAL $scriptSiteArr, $scriptNetArr, $isSuperAdmin, $isNetworkAdmin;
+	
+	if ($isSuperAdmin AND $isNetworkAdmin) {
+		$scriptArr = $scriptNetArr;
+	} else {
+		$scriptArr = $scriptSiteArr;
+	}
+	
+	$scriptArr[trim($_POST['title'])]['code'] = stripslashes($scriptArr[trim($_POST['title'])]['code']);
+	echo json_encode($scriptArr[trim($_POST['title'])]);
+	
+	die();
+}
+
+function wppDeleteScript() {
+	GLOBAL $scriptSiteArr, $scriptNetArr, $isSuperAdmin, $isNetworkAdmin;
+	
+	if ($isSuperAdmin AND $isNetworkAdmin) {
+		unset($scriptNetArr[trim($_POST['title'])]);
+		$result = update_site_option('wp_personalize_script_net_arr', $scriptNetArr);
+	} else {
+		unset($scriptSiteArr[trim($_POST['title'])]);
+		$result = update_option('wp_personalize_script_arr', $scriptSiteArr);
+	}
+	
+	if ($result) {
+		echo json_encode(array('result' => 'true'));
+	} else {
+		echo json_encode(array('result' => 'false'));
+	}
+	
+	die();
+}
+
+function handleScripts($scriptArr) {
+	GLOBAL $wpHeadScript, $wpAdminHeadScript, $wpBodyTopScript, $wpBodyMidScript, 
+				 $wpBodyFootScript, $wpAdminBodyFootScript, $isAdmin, $isNetworkAdmin;
+	
+	foreach ($scriptArr AS $key => $value) {
+		$valueArray = $value;
+		
+		switch ($valueArray['location']) {
+			case 'head':
+				if ($valueArray['type'] != 'php') {
+					if ($isAdmin AND in_array($valueArray['area'], array('admin', 'both'))) {
+						$wpAdminHeadScript .= stripslashes($valueArray['code']) . "\n";
+					} elseif (!$isAdmin AND in_array($valueArray['area'], array('site', 'both'))) {
+						$wpHeadScript .= stripslashes($valueArray['code']) . "\n";
+					}
+				} else {
+					if ($isAdmin AND in_array($valueArray['area'], array('admin', 'both'))) {
+						$scriptTemp 	 = substr($valueArray['code'], strpos($valueArray['code'], "\n") + 1);
+						$wpAdminHeadScript .= eval(stripslashes($scriptTemp)) . "\n";
+					} elseif (!$isAdmin AND in_array($valueArray['area'], array('site', 'both'))) {
+						$scriptTemp 	 = substr($valueArray['code'], strpos($valueArray['code'], "\n") + 1);
+						$wpHeadScript .= eval(stripslashes($scriptTemp)) . "\n";
+					}
+				}
+			break;
+			case 'bodyTop':
+			if ($valueArray['type'] != 'php') {
+					if ($isAdmin AND in_array($valueArray['area'], array('admin', 'both'))) {
+						$wpBodyTopScript .= stripslashes($valueArray['code']) . "\n";
+					} elseif (!$isAdmin AND in_array($valueArray['area'], array('site', 'both'))) {
+						$wpBodyTopScript .= stripslashes($valueArray['code']) . "\n";
+					}
+				} else {
+					if ($isAdmin AND in_array($valueArray['area'], array('admin', 'both'))) {
+						$scriptTemp 	 		= substr($valueArray['code'], strpos($valueArray['code'], "\n") + 1);
+						$wpBodyTopScript .= eval(stripslashes($scriptTemp)) . "\n";
+					} elseif (!$isAdmin AND in_array($valueArray['area'], array('site', 'both'))) {
+						$scriptTemp 	 		= substr($valueArray['code'], strpos($valueArray['code'], "\n") + 1);
+						$wpBodyTopScript .= eval(stripslashes($scriptTemp)) . "\n";
+					}
+				}
+			break;
+			break;
+			case 'bodyFoot':
+				if ($valueArray['type'] != 'php') {
+					if ($isAdmin AND in_array($valueArray['area'], array('admin', 'both'))) {
+						$wpAdminBodyFootScript .= stripslashes($valueArray['code']) . "\n";
+					} elseif (!$isAdmin AND in_array($valueArray['area'], array('site', 'both'))) {
+						$wpBodyFootScript .= stripslashes($valueArray['code']) . "\n";
+					}
+				} else {
+					if ($isAdmin AND in_array($valueArray['area'], array('admin', 'both'))) {
+						$scriptTemp 	 		 			= substr($valueArray['code'], strpos($valueArray['code'], "\n") + 1);
+						$wpAdminBodyFootScript .= eval(stripslashes($scriptTemp)) . "\n";
+					} elseif (!$isAdmin AND in_array($valueArray['area'], array('site', 'both'))) {
+						$scriptTemp 	 		 = substr($valueArray['code'], strpos($valueArray['code'], "\n") + 1);
+						$wpBodyFootScript .= eval(stripslashes($scriptTemp)) . "\n";
+					}
+				}
+			break;
+			default:
+				//Do nothing
 		}
 	}
 }
 
-$wpPersonalize = new WPPersonalize();
+
+function hookAdminHeadScript() {
+	GLOBAL $wpAdminHeadScript;
+	
+	echo $wpAdminHeadScript;
+	hookBodyTopScript();
+}
+
+function hookHeadScript() {
+	GLOBAL $wpHeadScript;
+	
+	echo $wpHeadScript;
+	hookBodyTopScript();
+}
+
+function hookBodyTopScript() {
+	GLOBAL $wpBodyTopScript;
+	
+	$wpBodyTopScript = addslashes($wpBodyTopScript);
+	$wpBodyTopScript = str_replace('</', '<\/', $wpBodyTopScript);
+	$wpBodyTopScript = str_replace(array("\r", "\n"), '', $wpBodyTopScript);
+	?>
+	<script type="text/javascript">
+		jQuery(document).ready( function($) {
+			$('body').prepend('<?php echo $wpBodyTopScript; ?>');
+		});
+	</script>
+	<?php 
+}
+
+function hookAdminBodyFootScript() {
+	GLOBAL $wpAdminBodyFootScript;
+	
+	echo $wpAdminBodyFootScript;
+}
+
+function hookBodyFootScript() {
+	GLOBAL $wpBodyFootScript;
+	
+	echo $wpBodyFootScript;
+}
+
 ?>
