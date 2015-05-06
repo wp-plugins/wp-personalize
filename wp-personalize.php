@@ -3,7 +3,7 @@
 * Plugin Name: WP Personalize
 * Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5GB537F64NUDE
 * Plugin URI: http://wordpress.org/plugins/wp-personalize/
-* Version: 2.0.1
+* Version: 2.1.0
 * Author: Ecalon IT LTD.
 * Author URI: http://www.ecalon.it/
 * Description: Personalize and customize your WordPress single site or multisite (for the entire network or individual sites).
@@ -29,7 +29,7 @@
 /**
 * @package WP Personalize
 * @author Ecalon IT LTD.
-* @version 2.0.1
+* @version 2.1.0
 * @copyright Ecalon IT LTD.
 */
 
@@ -44,34 +44,23 @@ define('WWP_PLUGIN_VERSION', '2.0.0');
 $scriptSiteArr	= get_option('wp_personalize_script_arr', array());
 $scriptNetArr 	= get_site_option('wp_personalize_script_net_arr', array());
 $scriptSetArr 	= get_site_option('wp_personalize_script_set_arr', array());
-$locationArr 	= array('head' 			=> __('Head', PLUGIN_LANG_DOMAIN),
-										  'bodyTop' 	=> __('Body Top', PLUGIN_LANG_DOMAIN),
-											'bodyFoot'	=> __('Body Footer', PLUGIN_LANG_DOMAIN));
-$typeArr 			= array('html'			=> __('HTML', PLUGIN_LANG_DOMAIN),
-											'css'				=> __('CSS', PLUGIN_LANG_DOMAIN),
-											'js'				=> __('Javascript', PLUGIN_LANG_DOMAIN),
-											'php'				=> __('PHP', PLUGIN_LANG_DOMAIN));
-$areaArr 			= array('site'			=> __('Site Only', PLUGIN_LANG_DOMAIN),
-											'admin'			=> __('Admin Only', PLUGIN_LANG_DOMAIN),
-											'both'			=> __('Both', PLUGIN_LANG_DOMAIN));
+$locationArr 	= array('head' 			=> __('Head', WWP_PLUGIN_LANG_DOMAIN),
+										  'bodyTop' 	=> __('Body Top', WWP_PLUGIN_LANG_DOMAIN),
+											'bodyFoot'	=> __('Body Footer', WWP_PLUGIN_LANG_DOMAIN));
+$typeArr 			= array('html'			=> __('HTML', WWP_PLUGIN_LANG_DOMAIN),
+											'css'				=> __('CSS', WWP_PLUGIN_LANG_DOMAIN),
+											'js'				=> __('Javascript', WWP_PLUGIN_LANG_DOMAIN),
+											'php'				=> __('PHP', WWP_PLUGIN_LANG_DOMAIN));
+$areaArr 			= array('site'			=> __('Site Only', WWP_PLUGIN_LANG_DOMAIN),
+											'admin'			=> __('Admin Only', WWP_PLUGIN_LANG_DOMAIN),
+											'both'			=> __('Both', WWP_PLUGIN_LANG_DOMAIN));
 //Hooks
 register_activation_hook(__FILE__, 'wppActivation');
 register_deactivation_hook(__FILE__, 'wppDeactivation');
 add_action('plugins_loaded', 'checkIsSuperAdmin'); 
 
-//Admin Styles
-wp_register_style(WWP_PLUGIN_NAME.'-admin', plugin_dir_url(__FILE__) . 'css/admin.css');
-wp_enqueue_style(WWP_PLUGIN_NAME.'-admin');
-wp_register_style(WWP_PLUGIN_NAME.'-whhg', plugin_dir_url(__FILE__) . 'css/whhg.css');
-wp_enqueue_style(WWP_PLUGIN_NAME.'-whhg');
-wp_register_style(WWP_PLUGIN_NAME.'-jquery-ui', plugin_dir_url(__FILE__) . 'css/jquery-ui.css');
-wp_enqueue_style(WWP_PLUGIN_NAME.'-jquery-ui');
-
-//Admin JS
-wp_register_script(WWP_PLUGIN_NAME.'-admin', plugin_dir_url(__FILE__) . 'js/admin.js', array('jquery-ui-dialog', 'jquery'));
-wp_enqueue_script(WWP_PLUGIN_NAME.'-admin');
-wp_register_script(WWP_PLUGIN_NAME.'-blockUI', plugin_dir_url(__FILE__) . 'js/jquery.blockUI.js', array('jquery-ui-dialog', 'jquery'));
-wp_enqueue_script(WWP_PLUGIN_NAME.'-blockUI');
+//Admin script and styles
+add_action('admin_enqueue_scripts', 'wppLoadScriptsStyles');
 
 //Load Scripts
 $wpHeadScript						= "";
@@ -118,6 +107,20 @@ function loadLangFiles() {
 	load_plugin_textdomain(WWP_PLUGIN_LANG_DOMAIN, false, basename(dirname(__FILE__)).'/lang');
 }
 
+function wppLoadScriptsStyles() {
+	wp_register_script(WWP_PLUGIN_NAME.'-admin', plugins_url( '/js/admin.js', __FILE__ ), array('jquery-ui-dialog', 'jquery'));
+	wp_register_script(WWP_PLUGIN_NAME.'-blockUI', plugins_url( '/js/jquery.blockUI.js', __FILE__ ), array('jquery-ui-dialog', 'jquery'));
+	wp_register_style(WWP_PLUGIN_NAME.'-admin', plugins_url('/css/admin.css', __FILE__ ));
+	wp_register_style(WWP_PLUGIN_NAME.'-whhg', plugins_url('/css/whhg.css', __FILE__ ));
+	wp_register_style(WWP_PLUGIN_NAME.'-jquery-ui', plugins_url('/css/jquery-ui.css', __FILE__ ));
+	
+	wp_enqueue_script(WWP_PLUGIN_NAME.'-admin');
+	wp_enqueue_script(WWP_PLUGIN_NAME.'-blockUI');
+	wp_enqueue_style(WWP_PLUGIN_NAME.'-admin');
+	wp_enqueue_style(WWP_PLUGIN_NAME.'-whhg');
+	wp_enqueue_style(WWP_PLUGIN_NAME.'-jquery-ui');	
+}
+
 function wppActivation() {
 	update_option(WWP_PLUGIN_NAME, WWP_PLUGIN_VERSION);
 	if (is_multisite()) {
@@ -157,8 +160,9 @@ function wppNetworkOptionsPage() {
 
 function checkIsSuperAdmin() {
 	GLOBAL $isSuperAdmin;
-	
-	$isSuperAdmin = is_super_admin(wp_get_current_user());
+	if (is_multisite()) {
+		$isSuperAdmin = is_super_admin(wp_get_current_user());
+	}
 }
 
 function wppLoadList() {

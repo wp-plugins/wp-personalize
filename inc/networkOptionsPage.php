@@ -1,11 +1,11 @@
 <?php 
 $displayName 			= WWP_PLUGIN_DISPLAY_NAME;
-$titleName 				= WWP_PLUGIN_TITLE_NAME . " (" . __('Network', PLUGIN_LANG_DOMAIN) . ")";
-$titleSetName			= WWP_PLUGIN_TITLE_NAME . " (" . __('Single Site Settings', PLUGIN_LANG_DOMAIN) . ")";
-$createNetworkTxt = "(" . __('Network', PLUGIN_LANG_DOMAIN) . ")";
+$titleName 				= WWP_PLUGIN_TITLE_NAME . " (" . __('Network', WWP_PLUGIN_LANG_DOMAIN) . ")";
+$titleSetName			= WWP_PLUGIN_TITLE_NAME . " (" . __('Single Site Settings', WWP_PLUGIN_LANG_DOMAIN) . ")";
+$createNetworkTxt = "(" . __('Network', WWP_PLUGIN_LANG_DOMAIN) . ")";
 ?>
 
-<div id="wpp-dialog-confirm" title="<?php _e('Info', PLUGIN_LANG_DOMAIN); ?>" style="display: none;">
+<div id="wpp-dialog-confirm" title="<?php _e('Info', WWP_PLUGIN_LANG_DOMAIN); ?>" style="display: none;">
   <p>
   	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
   	<div id="wpp-dialog-confirm-body"></div>
@@ -68,7 +68,7 @@ $createNetworkTxt = "(" . __('Network', PLUGIN_LANG_DOMAIN) . ")";
 				</td>
 				<td>
 					<button class="wpp-btn wpp-btn-sm wpp-btn-primary btn-update-settings" type="button" id="wpp-update-settings">
-						<?php _e('Update', PLUGIN_LANG_DOMAIN); ?>
+						<?php _e('Update', WWP_PLUGIN_LANG_DOMAIN); ?>
 					</button>
 				</td>
 			</tr>
