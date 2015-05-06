@@ -58,10 +58,10 @@
 						prependHTML += '<td class="wpp-cell-center">' + areaArr[obj.area] + '</td>';
 						prependHTML += '<td class="wpp-cell-center" style="white-space: nowrap;">';
 						prependHTML += '<button class="wpp-btn wpp-btn-sm wpp-btn-success btn-load-script" type="button" id="' + j + '" scriptTitle="' + obj.title + '">';
-						prependHTML += '	<?php _e("Load", PLUGIN_LANG_DOMAIN); ?>';
+						prependHTML += '	<?php _e("Load", WWP_PLUGIN_LANG_DOMAIN); ?>';
 						prependHTML += '</button>&nbsp;';
 						prependHTML += '<button class="wpp-btn wpp-btn-sm wpp-btn-danger btn-delete-script" type="button" id="' + j + '" scriptTitle="' + obj.title + '">';
-						prependHTML += '	<?php _e("Delete", PLUGIN_LANG_DOMAIN); ?>';
+						prependHTML += '	<?php _e("Delete", WWP_PLUGIN_LANG_DOMAIN); ?>';
 						prependHTML += '</button>';
 						prependHTML += '</td>';
 						prependHTML += '</tr>';
@@ -479,7 +479,7 @@
 								</td>
 								<td style="border-bottom: 0px;">
 									<select id="wpp-location" name="wpp-location">
-										<option value=""><?php _e('Location', PLUGIN_LANG_DOMAIN); ?></option>
+										<option value=""><?php _e('Location', WWP_PLUGIN_LANG_DOMAIN); ?></option>
 										<?php foreach ($locationArr AS $key => $value): ?>
 											<?php if (!isset($scriptSetArr['location'][$key]) OR $scriptSetArr['location'][$key] == 'true' OR ($isNetworkAdmin AND $isSuperAdmin)): ?>
 												<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
@@ -489,7 +489,7 @@
 								</td>
 								<td style="border-bottom: 0px;">
 									<select id="wpp-type" name="wpp-type">
-										<option value=""><?php _e('Type', PLUGIN_LANG_DOMAIN); ?></option>
+										<option value=""><?php _e('Type', WWP_PLUGIN_LANG_DOMAIN); ?></option>
 										<?php foreach ($typeArr AS $key => $value): ?>
 											<?php if (!isset($scriptSetArr['type'][$key]) OR $scriptSetArr['type'][$key] == 'true' OR ($isNetworkAdmin AND $isSuperAdmin)): ?>
 												<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
@@ -499,7 +499,7 @@
 								</td>
 								<td style="border-bottom: 0px;">
 									<select id="wpp-area" name="wpp-area">
-										<option value=""><?php _e('Area', PLUGIN_LANG_DOMAIN); ?></option>
+										<option value=""><?php _e('Area', WWP_PLUGIN_LANG_DOMAIN); ?></option>
 										<?php foreach ($areaArr AS $key => $value): ?>
 											<?php if (!isset($scriptSetArr['area'][$key]) OR $scriptSetArr['area'][$key] == 'true' OR ($isNetworkAdmin AND $isSuperAdmin)): ?>
 												<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
@@ -509,8 +509,8 @@
 								</td>
 								<td class="wpp-cell-center" style="border-bottom: 0px;">
 									<button class="wpp-btn wpp-btn-sm wpp-btn-primary btn-submit-code" type="button" id="wpp-submit-button" 
-											updateTxt="<?php _e('Update', PLUGIN_LANG_DOMAIN); ?>" createTxt="<?php _e('Create', PLUGIN_LANG_DOMAIN); ?>">
-										<?php _e('Create', PLUGIN_LANG_DOMAIN); ?>
+											updateTxt="<?php _e('Update', WWP_PLUGIN_LANG_DOMAIN); ?>" createTxt="<?php _e('Create', WWP_PLUGIN_LANG_DOMAIN); ?>">
+										<?php _e('Create', WWP_PLUGIN_LANG_DOMAIN); ?>
 									</button>
 								</td>
 							</tr>
